@@ -52,41 +52,14 @@ function initContactForm() {
   if (!form) return;
   const status = form.querySelector('.form__status');
 
-  form.addEventListener('submit', async (e) => {
-    const action = form.getAttribute('action');
-    if (!action || action.includes('TODO')) {
-      // No Formspree wired — fall back to mailto.
-      e.preventDefault();
-      const data = new FormData(form);
-      const subject = encodeURIComponent('Project inquiry from ' + (data.get('name') || 'website'));
-      const body = encodeURIComponent(`${data.get('message') || ''}\n\n— ${data.get('name') || ''}\n${data.get('email') || ''}`);
-      window.location.href = `mailto:hello@example.com?subject=${subject}&body=${body}`;
-      status.dataset.state = 'ok';
-      status.textContent = 'Opening your email client…';
-      return;
-    }
-
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    status.dataset.state = '';
-    status.textContent = 'Sending…';
-    try {
-      const res = await fetch(action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
-      });
-      if (res.ok) {
-        form.reset();
-        status.dataset.state = 'ok';
-        status.textContent = 'Thanks — message received. I’ll be in touch.';
-      } else {
-        status.dataset.state = 'err';
-        status.textContent = 'Something went wrong. Email me directly.';
-      }
-    } catch {
-      status.dataset.state = 'err';
-      status.textContent = 'Network error. Email me directly.';
-    }
+    const data = new FormData(form);
+    const subject = encodeURIComponent('Project inquiry from ' + (data.get('name') || 'website'));
+    const body = encodeURIComponent(`${data.get('message') || ''}\n\n— ${data.get('name') || ''}\n${data.get('email') || ''}`);
+    window.location.href = `mailto:josiahsdigitalservices@gmail.com?subject=${subject}&body=${body}`;
+    status.dataset.state = 'ok';
+    status.textContent = 'Opening your email client…';
   });
 }
 
