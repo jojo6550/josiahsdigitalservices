@@ -16,7 +16,7 @@ export const projects = [
     url: 'https://newborninitiatives.com',
     screenshot: 'images/gallery/newborn-initiatives.jpg',
     tech: ['Editorial', 'Donations', 'PayPal'],
-    year: '2025',
+    year: '2026',
     blurb: 'Nonprofit site for NBBI — telling the story of newborn care across Manchester, Clarendon, and St. Elizabeth, with PayPal donations wired in.',
     role: 'Design & Build',
   },
