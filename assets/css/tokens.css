@@ -1,0 +1,42 @@
+:root {
+  --bg: #F5F1EA;
+  --surface: #FFFDF8;
+  --ink: #1A1A1A;
+  --ink-muted: #6B6B66;
+  --accent: #8B5E3C;
+  --hairline: rgba(26, 26, 26, 0.10);
+  --hairline-strong: rgba(26, 26, 26, 0.22);
+
+  --font-display: "Fraunces", "Cormorant Garamond", "Georgia", serif;
+  --font-body: "Inter Tight", "Söhne", "Helvetica Neue", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6.5rem;
+  --space-7: 10rem;
+
+  --max-w: 1280px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 240ms;
+  --dur: 600ms;
+  --dur-slow: 900ms;
+
+  --radius-sm: 2px;
+  --radius: 6px;
+  --shadow-soft: 0 30px 60px -30px rgba(26, 26, 26, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur: 0ms;
+    --dur-slow: 0ms;
+  }
+}

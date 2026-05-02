@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F5F1EA" />
+  <title>Josiah's Digital Services — Web engineering from Kingston</title>
+  <meta name="description" content="Independent web engineer building SaaS products, single-page apps, multi-page sites, and ecommerce — handcrafted from Kingston, Jamaica." />
+  <meta property="og:title" content="Josiah's Digital Services" />
+  <meta property="og:description" content="SaaS, SPAs, MPAs, ecommerce — handcrafted from Kingston, Jamaica." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,30..100;1,9..144,300..600,30..100&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/sections.css" />
+
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23F5F1EA'/><text x='50%25' y='62%25' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='22' fill='%231A1A1A'>j</text></svg>" />
+</head>
+<body>
+  <div id="grain" aria-hidden="true"></div>
+
+  <header class="nav" role="banner">
+    <a href="#/" data-route="/" class="nav__brand" aria-label="Josiah's Digital Services — home">
+      <span><em style="font-style: italic;">Josiah</em>'s</span>
+      <small>Digital Services</small>
+    </a>
+    <nav>
+      <ul class="nav__links">
+        <li><a href="#/about" data-route="/about">About</a></li>
+        <li><a href="#/services" data-route="/services">Services</a></li>
+        <li><a href="#/work" data-route="/work">Work</a></li>
+        <li><a href="#/contact" data-route="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="hero__caption">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="eyebrow">Available for select projects · <span data-year>2025</span></span>
+      </div>
+
+      <h1 class="hero__display" data-split>
+        Quiet craft for the modern web.
+      </h1>
+
+      <p class="hero__sub">
+        I'm Josiah — an independent engineer building <strong>SaaS products, single-page apps, ecommerce, and editorial sites</strong> from Kingston, Jamaica. Calm interfaces. Considered code. Shipped on time.
+      </p>
+
+      <div class="hero__bottom">
+        <div class="hero__actions">
+          <a class="btn btn--filled magnetic" href="#/work" data-route="/work">
+            See selected work <span class="arrow">→</span>
+          </a>
+          <a class="btn magnetic" href="#/contact" data-route="/contact">
+            Start a project
+          </a>
+        </div>
+        <div class="hero__meta">
+          <span>JM · 18.0179° N</span>
+          <span>Independent · Est. 2024</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="about">
+      <aside class="about__sigil reveal" aria-hidden="true">
+        <span class="mark">j</span>
+        <small>signed · Kingston</small>
+      </aside>
+      <div class="about__copy reveal">
+        <p class="lede">
+          Software, considered. I work small on purpose — closer to the problem, closer to the craft.
+        </p>
+        <p>
+          Working out of Kingston, building for clients worldwide. The work spans <strong>SaaS dashboards, single-page apps, marketing sites, and ecommerce</strong>; the throughline is restraint — interfaces that load fast, read clearly, and age well.
+        </p>
+        <p>
+          I write the code, draw the type, run the lighthouse audits, and ship what I promised. No layers. No lost context. Just one studio, signed by hand.
+        </p>
+        <div class="signature">
+          — Josiah · sole proprietor
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section">
+      <header class="section__head reveal">
+        <h2>Services</h2>
+        <p>Four shapes of work. Each one priced and scoped before a single commit lands. Fixed fees where it makes sense; retainer where it doesn't.</p>
+      </header>
+
+      <ol class="services-list reveal">
+        <li>
+          <span class="services-list__num">01</span>
+          <span class="services-list__label">SaaS products</span>
+          <span class="services-list__desc">Dashboards, billing, auth, the boring middleware that has to feel effortless. From greenfield to rescuing v1.</span>
+        </li>
+        <li>
+          <span class="services-list__num">02</span>
+          <span class="services-list__label">Single-page apps</span>
+          <span class="services-list__desc">Tight, performant SPAs in vanilla, React, or Svelte — with state, routing, and accessibility handled properly.</span>
+        </li>
+        <li>
+          <span class="services-list__num">03</span>
+          <span class="services-list__label">Multi-page sites</span>
+          <span class="services-list__desc">Editorial, marketing, and content sites that score green on Lighthouse and read well on a phone in sunlight.</span>
+        </li>
+        <li>
+          <span class="services-list__num">04</span>
+          <span class="services-list__label">Ecommerce</span>
+          <span class="services-list__desc">Headless storefronts on Shopify, Stripe, or Snipcart — fast checkouts, inventory that holds up, themes you'd actually use.</span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- WORK -->
+    <section id="work" class="work">
+      <header class="section__head reveal">
+        <h2>Selected work</h2>
+        <p>Click a project to load a live preview right here. If a site blocks embedding, you'll see a screenshot and a link to open it in a new tab.</p>
+      </header>
+
+      <div id="project-list" class="projects" role="list"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+      <div class="reveal">
+        <h2>Let's build <em>something</em>.</h2>
+        <p class="contact__lead">
+          New work, repairs, redesigns, or just a good question about how to ship — write me.
+        </p>
+        <div class="contact__socials" aria-label="Social links">
+          <a href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://x.com/" target="_blank" rel="noopener">X ↗</a>
+          <a href="mailto:hello@josiah.dev">Email ↗</a>
+        </div>
+      </div>
+
+      <form id="contact-form" class="form contact__form reveal" action="https://formspree.io/f/TODO" method="POST" novalidate>
+        <div class="form__field">
+          <input type="text" id="f-name" name="name" required autocomplete="name" />
+          <label for="f-name">Name</label>
+        </div>
+        <div class="form__field">
+          <input type="email" id="f-email" name="email" required autocomplete="email" />
+          <label for="f-email">Email</label>
+        </div>
+        <div class="form__field">
+          <textarea id="f-msg" name="message" rows="4" required></textarea>
+          <label for="f-msg">Project notes</label>
+        </div>
+        <div style="display:flex; align-items:center; gap:1.4rem; flex-wrap:wrap;">
+          <button type="submit" class="btn btn--filled magnetic">
+            Send message <span class="arrow">→</span>
+          </button>
+          <span class="form__status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© <span data-year>2025</span> Josiah's Digital Services</span>
+    <span>Kingston · Jamaica · Worldwide</span>
+    <span>Hand-built · No build step · v1.0</span>
+  </footer>
+
+  <div id="preview-root"></div>
+
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
