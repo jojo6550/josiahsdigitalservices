@@ -1,0 +1,24 @@
+name = "jds-mail"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Request logs off by default: they would contain payer IP addresses.
+[observability]
+enabled = false
+
+[vars]
+# Comma-separated origins allowed to call this Worker (your GitHub Pages / custom domain).
+ALLOWED_ORIGIN = "https://YOUR-GITHUB-USERNAME.github.io"
+# Sandbox while testing; switch to https://api-m.paypal.com with your Live credentials.
+PAYPAL_API = "https://api-m.sandbox.paypal.com"
+# Must be the same client ID as js/pay.js.
+PAYPAL_CLIENT_ID = "YOUR-PAYPAL-CLIENT-ID"
+# Address on the domain you verified in Resend.
+FROM_EMAIL = "Josiah's Digital Services <invoices@YOUR-DOMAIN>"
+OWNER_EMAIL = "josiahsdigitalservices@gmail.com"
+SITE_URL = "https://YOUR-DOMAIN"
+BUSINESS_PHONE = ""
+
+# Secrets: set with `npx wrangler secret put <NAME>`, never commit them.
+#   PAYPAL_SECRET
+#   RESEND_API_KEY

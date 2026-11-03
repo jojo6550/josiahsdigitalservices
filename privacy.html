@@ -49,10 +49,12 @@
       <li>To prevent accidental double payments, your browser remembers the reference, amount and PayPal transaction ID of payments made in the current tab. This stays on your device in session storage and is erased when you close the tab. It never includes your name, email or card details.</li>
       <li>PayPal processes payments under its own <a href="https://www.paypal.com/myaccount/privacy/privacyhub" target="_blank" rel="noopener">privacy statement</a> and is certified to the PCI DSS card-security standard.</li>
       <li>We receive the transaction record (name, email, amount, reference, transaction ID) in our PayPal account.</li>
+      <li>After a completed payment, our email service reads the payment back from PayPal and emails your invoice and receipt through Resend, our email delivery provider. Resend processes your name, email and payment details only to deliver that email. Our email service keeps no copy and no request logs.</li>
     </ul>
 
     <h2>4 &nbsp;|&nbsp; How long we keep it</h2>
     <table>
+      <tr><td>Invoice / receipt emails</td><td>Kept in our mailbox with the payment records. Resend keeps delivery records for a limited period under its own policy.</td></tr>
       <tr><td>Payment and invoice records</td><td>[7] years after the end of the financial year of the transaction, as required for tax and accounting.</td></tr>
       <tr><td>Signed contracts and project records</td><td>For the project plus [7] years after it ends, to meet legal obligations and handle any claims.</td></tr>
       <tr><td>Enquiries that don't become projects</td><td>[12] months after our last contact.</td></tr>
@@ -70,7 +72,7 @@
     </ul>
 
     <h2>6 &nbsp;|&nbsp; Sharing</h2>
-    <p>We do not sell or rent personal data. We share it only with providers needed to run the business (PayPal, our email provider, hosting providers you approve), with professional advisers such as accountants, or when the law requires it. Some providers store data outside Jamaica under their own security and legal terms.</p>
+    <p>We do not sell or rent personal data. We share it only with providers needed to run the business (PayPal, Resend for invoice emails, Cloudflare for our email service, our email provider, hosting providers you approve), with professional advisers such as accountants, or when the law requires it. Some providers store data outside Jamaica under their own security and legal terms.</p>
 
     <h2>7 &nbsp;|&nbsp; Your rights</h2>
     <p>Under the Data Protection Act, 2020 (Jamaica) and similar laws, you may ask to access your data, correct it, have it deleted where we no longer need it, object to or restrict its use, or receive a copy. Email us and we will respond within [30] days. Records we must keep by law (such as payment records) cannot be deleted early. You may also complain to the Office of the Information Commissioner.</p>
