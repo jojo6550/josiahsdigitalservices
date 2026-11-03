@@ -1,7 +1,7 @@
 // Run: node --test
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parsePayment, paymentKey } from '../js/payment-core.js';
+import { parsePayment, paymentKey } from '../public/js/payment-core.js';
 
 const good = { name: '  Jane   Doe ', email: 'jane@example.com', ref: 'INV-1042', amount: '250.5' };
 

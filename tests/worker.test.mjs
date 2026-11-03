@@ -1,9 +1,8 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import worker from '../worker/src/index.js';
+import worker from '../src/index.js';
 
 const env = {
-  ALLOWED_ORIGIN: 'https://site.example',
   PAYPAL_API: 'https://paypal.test',
   PAYPAL_CLIENT_ID: 'id',
   PAYPAL_SECRET: 'secret',
@@ -38,7 +37,7 @@ beforeEach(() => {
 });
 
 const post = (body, origin = 'https://site.example') =>
-  worker.fetch(new Request('https://worker.example/', { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }), env);
+  worker.fetch(new Request('https://site.example/api/receipt', { method: 'POST', headers: { Origin: origin, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }), env);
 const resendCall = () => calls.find(c => c.url === 'https://api.resend.com/emails');
 
 test('rejects other origins and bad order IDs', async () => {
@@ -86,4 +85,15 @@ test('Resend failure returns 502 so the browser retries', async () => {
   const base = globalThis.fetch;
   globalThis.fetch = async (url, init) => String(url) === 'https://api.resend.com/emails' ? new Response('', { status: 500 }) : base(url, init);
   assert.equal((await post({ orderID: 'ORDER12345' })).status, 502);
+});
+
+test('redirects www and serves the site from assets', async () => {
+  const assets = { fetch: async req => new Response('asset:' + new URL(req.url).pathname) };
+  const www = await worker.fetch(new Request('https://www.site.example/terms.html?x=1'), { ...env, ASSETS: assets });
+  assert.equal(www.status, 301);
+  assert.equal(www.headers.get('Location'), 'https://site.example/terms.html?x=1');
+  const page = await worker.fetch(new Request('https://site.example/privacy.html'), { ...env, ASSETS: assets });
+  assert.equal(await page.text(), 'asset:/privacy.html');
+  const home = await worker.fetch(new Request('https://site.example/'), { ...env, ASSETS: assets });
+  assert.equal(await home.text(), 'asset:/index.html');
 });

@@ -1,0 +1,36 @@
+name = "josiahsdigitalservices"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Site and Worker on your Cloudflare domain; Cloudflare creates the DNS records and HTTPS certificates.
+routes = [
+  { pattern = "josiahsdigitalservices.com", custom_domain = true },
+  { pattern = "www.josiahsdigitalservices.com", custom_domain = true }
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+# Worker runs first so it can redirect www and handle /api/receipt; everything else is served from public/.
+run_worker_first = true
+# Serve page.html exactly as linked (no redirect to /page).
+html_handling = "none"
+
+# Request logs off: they would contain payer IP addresses.
+[observability]
+enabled = false
+
+[vars]
+# Sandbox while testing; switch to https://api-m.paypal.com with your Live credentials.
+PAYPAL_API = "https://api-m.sandbox.paypal.com"
+# Must be the same client ID as public/js/pay.js.
+PAYPAL_CLIENT_ID = "YOUR-PAYPAL-CLIENT-ID"
+# No-reply sender on the domain verified in Resend; client replies go to OWNER_EMAIL.
+FROM_EMAIL = "Josiah's Digital Services <noreply@josiahsdigitalservices.com>"
+OWNER_EMAIL = "josiahsdigitalservices@gmail.com"
+SITE_URL = "https://josiahsdigitalservices.com"
+BUSINESS_PHONE = ""
+
+# Secrets: set with `npx wrangler secret put <NAME>`, never commit them.
+#   PAYPAL_SECRET
+#   RESEND_API_KEY

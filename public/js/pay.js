@@ -3,15 +3,8 @@ import { parsePayment, paymentKey } from './payment-core.js';
 // Replace with your LIVE client ID from developer.paypal.com > Apps & Credentials. "test" = sandbox demo.
 const PAYPAL_CLIENT_ID = 'test';
 
-// Your deployed Cloudflare Worker (worker/), e.g. 'https://jds-mail.<you>.workers.dev'. Empty = no invoice email.
-// Also add this origin to connect-src in index.html's Content-Security-Policy.
-const RECEIPT_ENDPOINT = '';
-
-// GitHub Pages can't send a frame-ancestors header, so refuse to run the payment page inside someone else's frame.
-if (window.top !== window.self) {
-  document.body.textContent = 'For your security, payments must be made at josiahsdigitalservices directly.';
-  throw new Error('framed');
-}
+// Served by this site's own Worker (src/index.js). Empty = no invoice email.
+const RECEIPT_ENDPOINT = '/api/receipt';
 
 const form = document.getElementById('pay-form');
 const fields = document.getElementById('pay-fields');
@@ -104,10 +97,10 @@ async function emailInvoice(orderID, base) {
   show(base + ' Emailing your invoice…', 'ok');
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      const res = await fetch(RECEIPT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderID }) });
+      const res = await fetch(RECEIPT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderID }), signal: AbortSignal.timeout(25000) });
       if (res.ok) return show(base + ' Your invoice and receipt have been emailed to you.', 'ok');
       if (res.status < 500) break; // permanent answer (e.g. not completed): retrying won't help
-    } catch { /* network error: retry */ }
+    } catch { /* network error or timeout: retry */ }
     await new Promise(r => setTimeout(r, 1500 * attempt));
   }
   show(base + " PayPal will email your receipt. We couldn't send our invoice email just now, so we'll send it to you shortly.", 'ok');
