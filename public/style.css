@@ -152,3 +152,6 @@ fieldset:disabled { opacity: .6; }
 [hidden] { display: none !important; }
 .doc ul { padding-left: 20px; }
 .doc li { margin: 6px 0; }
+.steps { color: var(--muted); padding-left: 20px; margin: 14px 0 0; }
+.steps li { margin: 8px 0; }
+#pay-form .btn { margin-top: 4px; }

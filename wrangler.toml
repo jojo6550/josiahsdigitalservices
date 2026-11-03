@@ -20,11 +20,13 @@ html_handling = "none"
 [observability]
 enabled = false
 
+# Max 10 checkout starts per minute per visitor IP (IP used only for the counter, not stored by us).
+[[ratelimits]]
+name = "CHECKOUT_LIMITER"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }
+
 [vars]
-# Sandbox while testing; switch to https://api-m.paypal.com with your Live credentials.
-PAYPAL_API = "https://api-m.sandbox.paypal.com"
-# Must be the same client ID as public/js/pay.js.
-PAYPAL_CLIENT_ID = "YOUR-PAYPAL-CLIENT-ID"
 # No-reply sender on the domain verified in Resend; client replies go to OWNER_EMAIL.
 FROM_EMAIL = "Josiah's Digital Services <noreply@josiahsdigitalservices.com>"
 OWNER_EMAIL = "josiahsdigitalservices@gmail.com"
@@ -32,5 +34,6 @@ SITE_URL = "https://josiahsdigitalservices.com"
 BUSINESS_PHONE = ""
 
 # Secrets: set with `npx wrangler secret put <NAME>`, never commit them.
-#   PAYPAL_SECRET
+#   STRIPE_SECRET_KEY      Stripe Dashboard > Developers > API keys (restricted key recommended)
+#   STRIPE_WEBHOOK_SECRET  Stripe Dashboard > Developers > Webhooks > your endpoint > Signing secret
 #   RESEND_API_KEY

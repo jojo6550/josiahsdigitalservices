@@ -26,3 +26,6 @@ export function parsePayment(raw) {
 
 // Identifies "the same payment" for duplicate detection: same reference (case-insensitive) and amount.
 export const paymentKey = p => `${p.ref.toLowerCase()}|${p.amount}`;
+
+// "250.50" -> 25050. Exact (string-based), for amounts already normalised by parsePayment.
+export const toCents = amount => Number(amount.replace('.', ''));

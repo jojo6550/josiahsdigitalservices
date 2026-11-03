@@ -8,7 +8,7 @@ const money = (amount, currency) => `${currency === 'USD' ? 'US$' : currency + '
 const row = (label, value) =>
   `<tr><td style="padding:6px 0;color:#486581;width:42%">${label}</td><td style="padding:6px 0;font-weight:bold">${value}</td></tr>`;
 
-// r: { name, ref, amount, currency, captureId, paidAt (Date), method }
+// r: { name, ref, amount, currency, captureId (payment ID), paidAt (Date), method }
 // biz: { email, phone, website }
 export function receiptEmail(r, biz) {
   const total = money(r.amount, r.currency);
@@ -36,7 +36,7 @@ ${row('Status', '<span style="color:#0f8a5f">PAID</span>')}
 <tr><td style="padding:12px 0;border-bottom:1px solid #d9e2ec">Web services – ${esc(r.ref)}</td><td align="right" style="padding:12px 0;border-bottom:1px solid #d9e2ec">${esc(total)}</td></tr>
 <tr><td style="padding:12px 0;font-weight:bold">Total paid</td><td align="right" style="padding:12px 0;font-weight:800;font-size:17px">${esc(total)}</td></tr>
 </table>
-<p>PayPal transaction ID: ${esc(r.captureId)}. Please keep this email for your records.</p>
+<p>Transaction ID: ${esc(r.captureId)}. Please keep this email for your records.</p>
 <p>If you have any questions about this payment, just reply to this email.</p>
 <p>Kind regards,<br><strong>Josiah</strong><br>Josiah’s Digital Services</p>
 </td></tr><tr><td style="padding:18px 30px;background:#06233b;color:#d9eafa;font-size:12px">${footer}</td></tr></table></td></tr></table></body></html>`;
@@ -56,7 +56,7 @@ ${row('Status', '<span style="color:#0f8a5f">PAID</span>')}
     `Web services – ${r.ref}: ${total}`,
     `Total paid: ${total}`,
     '',
-    `PayPal transaction ID: ${r.captureId}`,
+    `Transaction ID: ${r.captureId}`,
     '',
     "Kind regards,\nJosiah\nJosiah's Digital Services",
     [biz.email, biz.phone, biz.website].filter(Boolean).join(' | ')

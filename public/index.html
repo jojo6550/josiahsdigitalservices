@@ -139,7 +139,7 @@
   <div class="wrap">
     <p class="eyebrow">Payments</p>
     <h2>Pay an invoice or deposit</h2>
-    <p class="lead">Pay securely by debit/credit card or PayPal balance. No PayPal account needed for card payments.</p>
+    <p class="lead">Pay securely by debit or credit card, Apple Pay or Google Pay on Stripe's secure checkout.</p>
     <div class="pay-box">
       <form class="card" id="pay-form" novalidate>
         <fieldset id="pay-fields">
@@ -152,13 +152,18 @@
         <label for="p-amt">Amount (USD)</label>
         <div class="amount"><input id="p-amt" name="amount" type="number" inputmode="decimal" min="1" max="10000" step="0.01" required></div>
         <label class="check" id="pay-again-box" hidden><input type="checkbox" id="pay-again"> Yes, I want to make another payment for this reference.</label>
+        <button class="btn" type="submit">Continue to secure checkout &rarr;</button>
         </fieldset>
-        <p class="fine">Card details are entered directly with PayPal and never touch this website. Nothing you type here is stored by us; it goes only to PayPal. By paying you agree to our <a href="terms.html">Payment Terms</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+        <div id="pay-msg" role="status" aria-live="polite"></div>
+        <p class="fine" style="margin-top:16px">By paying you agree to our <a href="terms.html">Payment Terms</a> and <a href="privacy.html">Privacy Policy</a>.</p>
       </form>
       <div class="card">
-        <h3>Checkout</h3>
-        <div id="paypal-buttons" style="margin-top:20px"></div>
-        <div id="pay-msg" role="status" aria-live="polite"></div>
+        <h3>How it works</h3>
+        <ul class="steps">
+          <li>Enter your details and the amount on your invoice.</li>
+          <li>Pay on Stripe's secure checkout page. Your card details go only to Stripe and never touch this website.</li>
+          <li>You'll get your invoice and receipt by email straight away.</li>
+        </ul>
         <p class="fine" style="margin-top:20px">Questions about an invoice? Email <a href="mailto:josiahsdigitalservices@gmail.com">josiahsdigitalservices@gmail.com</a>.</p>
       </div>
     </div>

@@ -34,20 +34,20 @@
 
     <h2>2 &nbsp;|&nbsp; What we collect and why</h2>
     <table>
-      <tr><td>Payments</td><td>Name or business name, email, invoice/project reference and amount. Used to process your payment and match it to your invoice. Card details are entered with PayPal only; we never see or store card numbers.</td></tr>
+      <tr><td>Payments</td><td>Name or business name, email, invoice/project reference and amount. Used to process your payment and match it to your invoice. Card details are entered on Stripe's checkout page only; we never see or store card numbers.</td></tr>
       <tr><td>Enquiries and projects</td><td>What you send us by email: contact details, project information, content and files. Used to quote, deliver and support your project.</td></tr>
       <tr><td>Access you give us</td><td>Hosting, domain or admin logins needed to build your site. Used only for the agreed work (see section 12 of our service agreement).</td></tr>
-      <tr><td>Website visits</td><td>We run no analytics, advertising or tracking cookies. Our host (Cloudflare) and font provider (Google Fonts) receive your IP address and browser details to deliver the page. PayPal sets its own cookies when the payment buttons load.</td></tr>
+      <tr><td>Website visits</td><td>We run no analytics, advertising or tracking cookies. Our host (Cloudflare) and font provider (Google Fonts) receive your IP address and browser details to deliver the page. Stripe sets its own cookies on its checkout page.</td></tr>
     </table>
     <p>We use this data to perform our contract with you, to take steps you ask for before a contract, and to meet our tax and accounting obligations.</p>
 
     <h2>3 &nbsp;|&nbsp; How payment data is handled</h2>
     <ul>
-      <li>This website has no database or server. The payment form sends your details directly to PayPal over an encrypted (HTTPS) connection. Nothing you type is saved by this website.</li>
-      <li>To prevent accidental double payments, your browser remembers the reference, amount and PayPal transaction ID of payments made in the current tab. This stays on your device in session storage and is erased when you close the tab. It never includes your name, email or card details.</li>
-      <li>PayPal processes payments under its own <a href="https://www.paypal.com/myaccount/privacy/privacyhub" target="_blank" rel="noopener">privacy statement</a> and is certified to the PCI DSS card-security standard.</li>
-      <li>We receive the transaction record (name, email, amount, reference, transaction ID) in our PayPal account.</li>
-      <li>After a completed payment, our email service reads the payment back from PayPal and emails your invoice and receipt through Resend, our email delivery provider. Resend processes your name, email and payment details only to deliver that email. Our email service keeps no copy and no request logs.</li>
+      <li>This website has no database. When you continue to checkout, your name, email, reference and amount are passed over an encrypted (HTTPS) connection to Stripe to create your payment page. Our server keeps no copy.</li>
+      <li>To prevent accidental double payments, your browser remembers the reference, amount and Stripe payment ID of payments made in the current tab. This stays on your device in session storage and is erased when you close the tab. It never includes your name, email or card details.</li>
+      <li>Stripe processes payments under its own <a href="https://stripe.com/privacy" target="_blank" rel="noopener">privacy policy</a> and is certified to PCI DSS Level 1, the highest card-security standard.</li>
+      <li>We receive the transaction record (name, email, amount, reference, transaction ID) in our Stripe account.</li>
+      <li>After a completed payment, Stripe notifies our server, which reads the payment back from Stripe and emails your invoice and receipt through Resend, our email delivery provider. Resend processes your name, email and payment details only to deliver that email. Our server keeps no copy and no request logs.</li>
     </ul>
 
     <h2>4 &nbsp;|&nbsp; How long we keep it</h2>
@@ -63,14 +63,14 @@
 
     <h2>5 &nbsp;|&nbsp; How we protect it</h2>
     <ul>
-      <li>Accounts holding client data (email, PayPal, hosting, code repositories) use strong unique passwords and two-factor authentication.</li>
+      <li>Accounts holding client data (email, Stripe, hosting, code repositories) use strong unique passwords and two-factor authentication.</li>
       <li>Access is limited to the people working on your project.</li>
       <li>Logins you share with us are kept in a password manager, not in plain email or documents.</li>
       <li>This website is served only over HTTPS and uses a Content Security Policy that limits which outside services can run on it.</li>
     </ul>
 
     <h2>6 &nbsp;|&nbsp; Sharing</h2>
-    <p>We do not sell or rent personal data. We share it only with providers needed to run the business (PayPal, Resend for invoice emails, Cloudflare for our email service, our email provider, hosting providers you approve), with professional advisers such as accountants, or when the law requires it. Some providers store data outside Jamaica under their own security and legal terms.</p>
+    <p>We do not sell or rent personal data. We share it only with providers needed to run the business (Stripe for payments, Resend for invoice emails, Cloudflare for hosting, our email provider, hosting providers you approve), with professional advisers such as accountants, or when the law requires it. Some providers store data outside Jamaica under their own security and legal terms.</p>
 
     <h2>7 &nbsp;|&nbsp; Your rights</h2>
     <p>Under the Data Protection Act, 2020 (Jamaica) and similar laws, you may ask to access your data, correct it, have it deleted where we no longer need it, object to or restrict its use, or receive a copy. Email us and we will respond within [30] days. Records we must keep by law (such as payment records) cannot be deleted early. You may also complain to the Office of the Information Commissioner.</p>

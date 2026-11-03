@@ -35,3 +35,10 @@ test('duplicate key ignores reference case, not amount', () => {
   assert.equal(paymentKey(a), paymentKey(b));
   assert.notEqual(paymentKey(a), paymentKey(c));
 });
+
+test('toCents is exact', async () => {
+  const { toCents } = await import('../public/js/payment-core.js');
+  for (const [amt, cents] of [['0.29', 29], ['1.00', 100], ['250.50', 25050], ['10000.00', 1000000], ['19.99', 1999]]) {
+    assert.equal(toCents(amt), cents, amt);
+  }
+});
