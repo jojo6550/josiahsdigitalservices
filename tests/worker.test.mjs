@@ -73,7 +73,7 @@ test('checkout: validated amount in cents, idempotency key, returns Stripe URL',
   assert.equal(p.get('managed_payments[enabled]'), 'false');
   assert.equal(p.get('customer_email'), 'jane@example.com');
   assert.equal(p.get('metadata[ref]'), 'INV-1');
-  assert.equal(p.get('success_url'), SITE + '/thanks.html?session_id={CHECKOUT_SESSION_ID}');
+  assert.equal(p.get('success_url'), SITE + '/thanks?session_id={CHECKOUT_SESSION_ID}');
 });
 
 test('checkout: rejects other origins, bad input and missing key without calling Stripe', async () => {
@@ -149,7 +149,6 @@ test('routing: www redirect, assets, unknown API', async () => {
   const www = await worker.fetch(new Request('https://www.site.example/terms.html?x=1'), { ...env, ASSETS: assets });
   assert.equal(www.status, 301);
   assert.equal(www.headers.get('Location'), 'https://site.example/terms.html?x=1');
-  assert.equal(await (await worker.fetch(new Request(SITE + '/'), { ...env, ASSETS: assets })).text(), 'asset:/index.html');
-  assert.equal(await (await worker.fetch(new Request(SITE + '/privacy.html'), { ...env, ASSETS: assets })).text(), 'asset:/privacy.html');
+  assert.equal(await (await worker.fetch(new Request(SITE + '/privacy'), { ...env, ASSETS: assets })).text(), 'asset:/privacy');
   assert.equal((await call('/api/receipt', { method: 'POST' })).status, 404);
 });

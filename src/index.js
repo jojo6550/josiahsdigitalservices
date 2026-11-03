@@ -39,9 +39,8 @@ export default {
         return json(502, { error: 'upstream_failed' });
       }
     }
-    // The website in public/, with public/_headers applied. html_handling is "none", so map folders to index.html.
-    if (url.pathname.endsWith('/')) url.pathname += 'index.html';
-    return env.ASSETS.fetch(new Request(url, request));
+    // The website in public/, with public/_headers applied. Clean URLs: /terms serves terms.html, /terms.html redirects.
+    return env.ASSETS.fetch(request);
   }
 };
 
@@ -105,7 +104,7 @@ async function createCheckout(request, url, env) {
       'metadata[name]': p.name,
       'payment_intent_data[description]': `Josiah's Digital Services – ${p.ref}`,
       'payment_intent_data[metadata][ref]': p.ref,
-      success_url: `${env.SITE_URL}/thanks.html?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${env.SITE_URL}/thanks?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${env.SITE_URL}/#pay`
     }
   });

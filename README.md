@@ -50,7 +50,7 @@ npm run deploy     # publish to josiahsdigitalservices.com
 1. `pay.js` validates the form and sends it to `POST /api/checkout` with a random key per attempt.
 2. The Worker validates it again (same rules, `payment-core.js`), converts the amount to exact cents, and creates a Stripe Checkout Session using that key as Stripe's `Idempotency-Key`. Retries and double clicks get the same session, never a second one.
 3. The client pays on Stripe's hosted page (cards, Apple Pay, Google Pay). Card details never touch this site.
-4. Stripe redirects to `thanks.html?session_id=…`, which asks `GET /api/session` for the confirmed status (no name or email returned).
+4. Stripe redirects to `/thanks?session_id=…`, which asks `GET /api/session` for the confirmed status (no name or email returned).
 5. Stripe calls `POST /api/stripe-webhook`. The Worker verifies the signature (HMAC-SHA256, 5-minute window), re-reads the session from Stripe, and if it's paid emails the branded invoice/receipt from `noreply@` via Resend (BCC you, replies to you). As Stripe recommends, the thank-you page's status check triggers the same idempotent fulfillment too, so the email goes out immediately even if the webhook is late.
 
 Sessions pass `managed_payments[enabled]=false`: your account has Stripe Managed Payments on by default, and it only accepts eligible digital products, not custom services.

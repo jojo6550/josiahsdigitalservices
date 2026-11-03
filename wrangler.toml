@@ -13,8 +13,8 @@ directory = "./public"
 binding = "ASSETS"
 # Worker runs first so it can redirect www and handle /api/receipt; everything else is served from public/.
 run_worker_first = true
-# Serve page.html exactly as linked (no redirect to /page).
-html_handling = "none"
+# Clean URLs: /terms serves terms.html; /terms.html and /index.html redirect to /terms and /.
+html_handling = "drop-trailing-slash"
 
 # Request logs off: they would contain payer IP addresses.
 [observability]
