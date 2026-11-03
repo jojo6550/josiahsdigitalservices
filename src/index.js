@@ -1,7 +1,8 @@
 // Cloudflare Worker: serves the website (public/) and handles Stripe payments.
 //   POST /api/checkout        validated details -> Stripe Checkout page URL
-//   GET  /api/session?id=     confirmed payment status for the thank-you page
-//   POST /api/stripe-webhook  signed by Stripe -> branded invoice email via Resend, once per payment
+//   GET  /api/session?id=     confirmed payment status for the thank-you page (also triggers fulfillment)
+//   POST /api/stripe-webhook  signed by Stripe -> fulfillment
+// Fulfillment = branded invoice email via Resend, exactly once per payment, whichever path gets there first.
 // Amounts are validated here (trust boundary) and the invoice email is built only from what Stripe reports.
 import { parsePayment, toCents } from '../public/js/payment-core.js';
 import { receiptEmail } from './email.js';
@@ -23,7 +24,7 @@ const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.hostname.startsWith('www.')) {
       url.hostname = url.hostname.slice(4);
@@ -31,7 +32,7 @@ export default {
     }
     if (url.pathname.startsWith('/api/')) {
       try {
-        return await api(request, url, env);
+        return await api(request, url, env, ctx);
       } catch (err) {
         // Log status only; never payer details.
         console.error(err.message);
@@ -44,10 +45,10 @@ export default {
   }
 };
 
-function api(request, url, env) {
+function api(request, url, env, ctx) {
   const route = `${request.method} ${url.pathname}`;
   if (route === 'POST /api/checkout') return createCheckout(request, url, env);
-  if (route === 'GET /api/session') return getSession(url, env);
+  if (route === 'GET /api/session') return getSession(url, env, ctx);
   if (route === 'POST /api/stripe-webhook') return webhook(request, env);
   return json(404, { error: 'not_found' });
 }
@@ -93,6 +94,8 @@ async function createCheckout(request, url, env) {
     idempotencyKey: `checkout-${raw.key}`,
     params: {
       mode: 'payment',
+      // Managed Payments (Stripe as merchant of record) only covers eligible digital products, not custom services.
+      'managed_payments[enabled]': 'false',
       'line_items[0][quantity]': '1',
       'line_items[0][price_data][currency]': 'usd',
       'line_items[0][price_data][unit_amount]': String(toCents(p.amount)),
@@ -109,7 +112,7 @@ async function createCheckout(request, url, env) {
   return json(200, { url: session.url });
 }
 
-async function getSession(url, env) {
+async function getSession(url, env, ctx) {
   const id = url.searchParams.get('id') || '';
   if (!SESSION_ID_RE.test(id)) return json(400, { error: 'bad_session_id' });
   let s;
@@ -117,6 +120,9 @@ async function getSession(url, env) {
     if (err.status === 404) return json(404, { error: 'not_found' });
     throw err;
   }
+  // Stripe recommends fulfilling from the landing page too (client is present), not only via webhook.
+  // Runs after the response; safe alongside the webhook because fulfill() is idempotent.
+  if (s.payment_status === 'paid') ctx?.waitUntil(fulfill(env, id).catch(err => console.error(err.message)));
   // Only what the thank-you page shows; no name or email.
   return json(200, {
     status: s.status,
@@ -171,14 +177,18 @@ async function webhook(request, env) {
 
   const sessionId = event.data?.object?.id;
   if (!SESSION_ID_RE.test(sessionId || '')) return json(400, { error: 'bad_session_id' });
+  return json(200, await fulfill(env, sessionId));
+}
 
+// Safe to call many times, concurrently, from the webhook and the thank-you page.
+async function fulfill(env, sessionId) {
   // Re-read from Stripe: events can arrive late, twice or out of order.
   const s = await stripe(env, `/checkout/sessions/${sessionId}?expand[]=payment_intent.latest_charge`);
   // Bank/async payments: wait for checkout.session.async_payment_succeeded.
-  if (s.payment_status !== 'paid') return json(200, { sent: false, reason: 'not_paid' });
+  if (s.payment_status !== 'paid') return { sent: false, reason: 'not_paid' };
   const pi = s.payment_intent;
   // Durable "sent once" marker lives on the PaymentIntent, so Stripe retries days later don't resend.
-  if (pi.metadata?.receipt_sent) return json(200, { sent: false, reason: 'already_sent' });
+  if (pi.metadata?.receipt_sent) return { sent: false, reason: 'already_sent' };
 
   const charge = pi.latest_charge;
   const payerEmail = s.customer_details?.email || s.customer_email;
@@ -214,8 +224,8 @@ async function webhook(request, env) {
     }),
     signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
   });
-  if (!mail.ok) throw new UpstreamError('Resend', mail.status); // 502 -> Stripe retries the webhook
+  if (!mail.ok) throw new UpstreamError('Resend', mail.status); // webhook answers 502 -> Stripe retries
 
   await stripe(env, `/payment_intents/${pi.id}`, { params: { 'metadata[receipt_sent]': new Date().toISOString() } });
-  return json(200, { sent: true });
+  return { sent: true };
 }

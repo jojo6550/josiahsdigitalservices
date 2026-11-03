@@ -22,7 +22,7 @@ Portfolio and business website (services, portfolio, service agreement, policies
 ```bash
 npm install        # once
 npm test           # unit tests
-npm run dev        # local site + API at http://localhost:8787
+npm run dev        # local site + API at http://localhost:8787 (test secrets in .dev.vars, git-ignored)
 npm run deploy     # publish to josiahsdigitalservices.com
 ```
 
@@ -33,6 +33,7 @@ npm run deploy     # publish to josiahsdigitalservices.com
 3. **Stripe:** Dashboard → Developers:
    - **API keys:** create a **restricted key** with *Write* on Checkout Sessions and Payment Intents and *Read* on Charges (everything else *None*). Use the test-mode key first (`rk_test_…`), then live.
    - **Webhooks → Add endpoint:** `https://josiahsdigitalservices.com/api/stripe-webhook`, events `checkout.session.completed` and `checkout.session.async_payment_succeeded`. Copy its **Signing secret** (`whsec_…`).
+   - The publishable key (`pk_…`) isn't needed: the site redirects to Stripe's hosted page.
    - Optional: Settings → Customer emails → turn off *Successful payments* if you only want your branded invoice email, not Stripe's receipt too.
 4. **Secrets** (stored encrypted in Cloudflare, never in this repo):
    ```bash
@@ -50,7 +51,9 @@ npm run deploy     # publish to josiahsdigitalservices.com
 2. The Worker validates it again (same rules, `payment-core.js`), converts the amount to exact cents, and creates a Stripe Checkout Session using that key as Stripe's `Idempotency-Key`. Retries and double clicks get the same session, never a second one.
 3. The client pays on Stripe's hosted page (cards, Apple Pay, Google Pay). Card details never touch this site.
 4. Stripe redirects to `thanks.html?session_id=…`, which asks `GET /api/session` for the confirmed status (no name or email returned).
-5. Stripe calls `POST /api/stripe-webhook`. The Worker verifies the signature (HMAC-SHA256, 5-minute window), re-reads the session from Stripe, and if it's paid emails the branded invoice/receipt from `noreply@` via Resend (BCC you, replies to you).
+5. Stripe calls `POST /api/stripe-webhook`. The Worker verifies the signature (HMAC-SHA256, 5-minute window), re-reads the session from Stripe, and if it's paid emails the branded invoice/receipt from `noreply@` via Resend (BCC you, replies to you). As Stripe recommends, the thank-you page's status check triggers the same idempotent fulfillment too, so the email goes out immediately even if the webhook is late.
+
+Sessions pass `managed_payments[enabled]=false`: your account has Stripe Managed Payments on by default, and it only accepts eligible digital products, not custom services.
 
 ## Security
 

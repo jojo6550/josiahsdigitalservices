@@ -70,6 +70,7 @@ test('checkout: validated amount in cents, idempotency key, returns Stripe URL',
   const p = new URLSearchParams(String(c.init.body));
   assert.equal(p.get('line_items[0][price_data][unit_amount]'), '1234');
   assert.equal(p.get('line_items[0][price_data][currency]'), 'usd');
+  assert.equal(p.get('managed_payments[enabled]'), 'false');
   assert.equal(p.get('customer_email'), 'jane@example.com');
   assert.equal(p.get('metadata[ref]'), 'INV-1');
   assert.equal(p.get('success_url'), SITE + '/thanks.html?session_id={CHECKOUT_SESSION_ID}');
@@ -90,9 +91,12 @@ test('checkout: rate limited', async () => {
   assert.equal(res.status, 429);
 });
 
-test('session: returns status for thank-you page, no PII', async () => {
-  const res = await call('/api/session?id=' + SID);
+test('session: returns status for thank-you page, no PII, and fulfills in the background', async () => {
+  const pending = [];
+  const res = await worker.fetch(new Request(SITE + '/api/session?id=' + SID), env, { waitUntil: p => pending.push(p) });
   assert.deepEqual(await res.json(), { status: 'complete', paid: true, ref: 'INV-1', amount: '12.34', id: 'pi_123' });
+  await Promise.all(pending);
+  assert.equal(find('https://api.resend.com/emails').length, 1);
   assert.equal((await call('/api/session?id=../x')).status, 400);
   stripeSession = null;
   assert.equal((await call('/api/session?id=' + SID)).status, 404);
